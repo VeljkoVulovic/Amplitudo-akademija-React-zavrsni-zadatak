@@ -44,17 +44,17 @@ const Navbar = () => {
             }
           ></Menu.Item>
           <Menu.Item
-            key="1"
+            key="2"
             icon={<TeamOutlined />}
             title="Clients"
             style={{ marginTop: "20px" }}
           >
             Clients
           </Menu.Item>
-          <Menu.Item key="2" icon={<CarOutlined />} title="Cars">
+          <Menu.Item key="3" icon={<CarOutlined />} title="Cars">
             Cars
           </Menu.Item>
-          <Menu.Item key="3" icon={<SolutionOutlined />} title="Reservations">
+          <Menu.Item key="4" icon={<SolutionOutlined />} title="Reservations">
             Reservations
           </Menu.Item>
         </Menu>

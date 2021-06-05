@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
+import Loader from "../src/components/loader/Loader";
 
 const Login = React.lazy(() => import("./pages/login/Login"));
 const Home = React.lazy(() => import("./pages/home/Home"));
@@ -12,7 +13,7 @@ function App() {
           path={["/", "/login"]}
           exact
           component={() => (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loader />}>
               <Login />
             </Suspense>
           )}
@@ -21,7 +22,7 @@ function App() {
           path="/home"
           exact
           component={() => (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loader />}>
               <Home />
             </Suspense>
           )}

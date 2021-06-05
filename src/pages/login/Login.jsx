@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Form, Input, Button } from "antd";
-import {
-  MailOutlined,
-  LockOutlined,
-  LoginOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { MailOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
 import "./Login.css";
 
 const Login = () => {
@@ -22,6 +17,7 @@ const Login = () => {
   const onSubmit = (data) => {
     console.log(data);
     setErrorMessage("Testing error message!");
+    history.push("/home");
   };
 
   const onError = (errors) => {
@@ -88,21 +84,13 @@ const Login = () => {
             <span className="errorSpan"></span>
           )}
           <Button
-            style={{ width: "110px", marginTop: "15px" }}
+            style={{ width: "150px", marginTop: "15px" }}
             shape="round"
             icon={<LoginOutlined className="site-form-item-icon" />}
             type="primary"
             onClick={handleSubmit(onSubmit)}
           >
             Log in
-          </Button>
-          <Button
-            style={{ width: "110px" }}
-            shape="round"
-            icon={<UserAddOutlined className="site-form-item-icon" />}
-            onClick={() => history.push("/register")}
-          >
-            Register
           </Button>
         </Form>
         {errorMessage !== "" ? (

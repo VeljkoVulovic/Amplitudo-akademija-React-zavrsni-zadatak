@@ -17,6 +17,7 @@ const Login = () => {
   const onSubmit = (data) => {
     console.log(data);
     setErrorMessage("Testing error message!");
+    localStorage.setItem("jwt-token", "ok");
     history.push("/home");
   };
 

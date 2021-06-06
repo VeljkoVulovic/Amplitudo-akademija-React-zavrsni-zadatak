@@ -1,10 +1,13 @@
 import React from "react";
-import Navbar from "../../components/navbar/Navbar";
+import { Result } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
 
 const Home = () => {
   return (
     <div>
-      <Navbar />
+      <div className="styleDiv centerDiv">
+        <Result icon={<SmileOutlined />} title="Welcome aboard!"></Result>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import Loader from "../src/components/loader/Loader";
+import PrivateRoute from "./privateRoute/PrivateRoute";
 
 const Login = React.lazy(() => import("./pages/login/Login"));
 const Home = React.lazy(() => import("./pages/home/Home"));
@@ -9,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route
+        <PrivateRoute
           path={["/", "/login"]}
           exact
           component={() => (
@@ -18,7 +19,7 @@ function App() {
             </Suspense>
           )}
         />
-        <Route
+        <PrivateRoute
           path="/home"
           exact
           component={() => (
@@ -26,6 +27,7 @@ function App() {
               <Home />
             </Suspense>
           )}
+          isPrivate
         />
       </Switch>
     </div>

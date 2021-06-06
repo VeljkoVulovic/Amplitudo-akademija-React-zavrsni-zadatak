@@ -52,3 +52,31 @@ code {
   background-color: #ffbaba;
   background-image: url("https://i.imgur.com/GnyDvKN.png");
 }
+
+.tableDiv {
+  margin: 65px auto;
+  width: 1100px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 3px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px,
+    rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+}
+
+.ant-table-tbody > tr > td,
+.ant-table-thead > tr > th {
+  padding: 4px;
+  text-align: center;
+}
+tr:nth-child(odd) {
+  background: rgb(220, 220, 220);
+}
+tr:nth-child(even) {
+  background: rgb(200, 200, 200);
+}
+thead[class*="ant-table-thead"] th {
+  background-color: #001c36 !important;
+  color: white !important;
+  border-color: #001c36;
+  text-align: center !important;
+}

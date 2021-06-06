@@ -11,12 +11,15 @@ import {
 } from "@ant-design/icons";
 import background from "../../images/full_background.png";
 import logo from "../../images/sixt_car_rental.jpg";
+import { useHistory } from "react-router-dom";
+import { Content } from "antd/lib/layout/layout";
 
 const { Header, Sider } = Layout;
 const { SubMenu } = Menu;
 
-const Navbar = () => {
+const Navbar = ({content}) => {
   const [collapsed, setCollapsed] = useState(true);
+  const history = useHistory();
 
   const onCollapse = (collapsed) => {
     setCollapsed((prevState) => !prevState);
@@ -42,12 +45,14 @@ const Navbar = () => {
                 src={logo}
               />
             }
+            onClick={() => history.push("/home")}
           ></Menu.Item>
           <Menu.Item
             key="2"
             icon={<TeamOutlined />}
             title="Clients"
             style={{ marginTop: "20px" }}
+            onClick={() => history.push("/clients")}
           >
             Clients
           </Menu.Item>
@@ -93,6 +98,7 @@ const Navbar = () => {
             </Menu.Item>
           </Menu>
         </Header>
+        <Content>{content}</Content>
       </Layout>
     </Layout>
   );

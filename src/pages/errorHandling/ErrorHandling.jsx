@@ -1,23 +1,24 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { Result, Button } from "antd";
-import { LoginOutlined } from "@ant-design/icons";
+import { HomeOutlined } from "@ant-design/icons";
 
-const Forbidden = () => {
+const ErrorHandling = ({ error, errorMessage }) => {
   const history = useHistory();
   return (
-    <div className="centerDiv styleDiv">
+    <div className="centerDiv">
       <Result
-        subTitle="Sorry, you are not authorized to access this page."
+        status={error}
+        title={"Error " + error}
+        subTitle={errorMessage}
         extra={
           <Button
             style={{ width: "150px", marginTop: "15px" }}
-            shape="round"
-            icon={<LoginOutlined className="site-form-item-icon" />}
+            icon={<HomeOutlined className="site-form-item-icon" />}
             type="primary"
             onClick={() => history.push("/login")}
           >
-            Back to login
+            Back Home
           </Button>
         }
       />
@@ -25,4 +26,4 @@ const Forbidden = () => {
   );
 };
 
-export default Forbidden;
+export default ErrorHandling;

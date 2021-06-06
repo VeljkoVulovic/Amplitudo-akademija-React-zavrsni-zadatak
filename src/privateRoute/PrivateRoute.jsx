@@ -2,7 +2,7 @@ import React from "react";
 import { Route } from "react-router";
 import AuthLayout from "../components/layout/AuthLayout";
 import BasicLayout from "../components/layout/BasicLayout";
-import Forbidden from "../pages/forbidden/Forbidden";
+import ErrorHandling from "../pages/errorHandling/ErrorHandling";
 
 const PrivateRoute = ({ component: Component, isPrivate, ...rest }) => {
   const Layout = isPrivate ? AuthLayout : BasicLayout;
@@ -17,7 +17,12 @@ const PrivateRoute = ({ component: Component, isPrivate, ...rest }) => {
               <Component {...rest} />
             </Layout>
           ) : (
-            <Forbidden />
+            <ErrorHandling
+              error={"403"}
+              errorMessage={
+                "Sorry, you are not authorized to access this page."
+              }
+            />
           )
         ) : (
           <Layout>

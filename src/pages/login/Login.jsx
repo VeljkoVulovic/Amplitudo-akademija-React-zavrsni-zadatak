@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Form, Input, Button } from "antd";
 import { MailOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
 import "./Login.css";
+import { login } from "../../services/account";
 
 const Login = () => {
   const history = useHistory();
@@ -15,10 +16,15 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    setErrorMessage("Testing error message!");
-    localStorage.setItem("jwt-token", "ok");
-    history.push("/home");
+    login(data)
+      .then(function (response) {
+        localStorage.setItem("jwt-token", response?.data["access_token"]);
+        history.push("/home");
+      })
+      .catch(function (error) {
+        console.log(error?.response?.data);
+        setErrorMessage(error?.response?.data?.error);
+      });
   };
 
   const onError = (errors) => {

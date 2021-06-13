@@ -54,7 +54,7 @@ code {
 }
 
 .tableDiv {
-  margin: 65px auto;
+  margin: 30px auto;
   width: 1100px;
   text-align: center;
   border: 1px solid black;
@@ -79,4 +79,13 @@ thead[class*="ant-table-thead"] th {
   color: white !important;
   border-color: #001c36;
   text-align: center !important;
+}
+
+.ant-select-selection-item {
+  flex: none !important;
+  overflow: none !important;
+}
+
+.ant-form-item {
+  margin-bottom: 0px !important;
 }

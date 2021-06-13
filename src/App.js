@@ -7,6 +7,7 @@ import ErrorHandling from "../src/pages/errorHandling/ErrorHandling";
 const Login = React.lazy(() => import("./pages/login/Login"));
 const Home = React.lazy(() => import("./pages/home/Home"));
 const Clients = React.lazy(() => import("./pages/clients/Clients"));
+const Cars = React.lazy(() => import("./pages/cars/Cars"));
 
 function App() {
   return (
@@ -37,6 +38,16 @@ function App() {
           component={() => (
             <Suspense fallback={<Loader />}>
               <Clients />
+            </Suspense>
+          )}
+          isPrivate
+        />
+        <PrivateRoute
+          path="/cars"
+          exact
+          component={() => (
+            <Suspense fallback={<Loader />}>
+              <Cars />
             </Suspense>
           )}
           isPrivate

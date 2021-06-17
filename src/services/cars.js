@@ -1,21 +1,25 @@
 import axiosInstance from "./axios";
 
 export const getCars = () => {
-  return axiosInstance.get(`/api/vehicles`);
+  return axiosInstance.get(`/vehicles`);
 };
 
 export const storeCar = (data) => {
-  return axiosInstance.post(`/api/vehicle`, data);
+  return axiosInstance.post(`/vehicle`, data);
 };
 
 export const showCar = (id) => {
-  return axiosInstance.get(`/api/vehicle-show/${id}`);
+  return axiosInstance.get(`/vehicle-show/${id}`);
 };
 
-export const updateCar = (id, data) => {
-  return axiosInstance.post(`/api/vehicle-update/${id}`, data);
+export const updateCar = (data, id) => {
+  return axiosInstance.post(`/vehicle-update/${id}`, data);
 };
 
 export const deleteCar = (id) => {
-  return axiosInstance.delete(`/api/vehicle-delete/${id}`);
+  return axiosInstance.delete(`/vehicle-delete/${id}`);
+};
+
+export const getCarTypes = () => {
+  return axiosInstance.get(`/car-types`);
 };

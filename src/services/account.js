@@ -4,24 +4,20 @@ import axios from "axios";
 export const login = (data) => {
   return axios({
     method: "POST",
-    baseURL: "http://akademija-api.proserver.me/",
-    url: "/api/auth/login",
+    baseURL: "http://akademija-api.proserver.me/api/",
+    url: "/auth/login",
     data: data,
   });
 };
 
 export const info = () => {
-  return axiosInstance.post(`/api/auth/me`);
-};
-
-export const logout = () => {
-  return axiosInstance.post(`/api/auth/logout`);
+  return axiosInstance.post(`/auth/me`);
 };
 
 export const refreshToken = () => {
-  return axiosInstance.post(`/api/auth/refresh`);
+  return axiosInstance.post(`/auth/refresh`);
 };
 
 export const changePassword = (data) => {
-  return axiosInstance.post(`/api/auth/change-password`, data);
+  return axiosInstance.post(`/auth/change-password`, data);
 };

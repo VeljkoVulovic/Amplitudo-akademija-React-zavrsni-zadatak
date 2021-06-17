@@ -17,7 +17,7 @@ import { Content } from "antd/lib/layout/layout";
 const { Header, Sider } = Layout;
 const { SubMenu } = Menu;
 
-const Navbar = ({content}) => {
+const Navbar = ({ content }) => {
   const [collapsed, setCollapsed] = useState(true);
   const history = useHistory();
 
@@ -56,10 +56,20 @@ const Navbar = ({content}) => {
           >
             Clients
           </Menu.Item>
-          <Menu.Item key="3" icon={<CarOutlined />} title="Cars">
+          <Menu.Item
+            key="3"
+            icon={<CarOutlined />}
+            title="Cars"
+            onClick={() => history.push("/cars")}
+          >
             Cars
           </Menu.Item>
-          <Menu.Item key="4" icon={<SolutionOutlined />} title="Reservations">
+          <Menu.Item
+            key="4"
+            icon={<SolutionOutlined />}
+            title="Reservations"
+            onClick={() => history.push("/reservations")}
+          >
             Reservations
           </Menu.Item>
         </Menu>
@@ -93,7 +103,15 @@ const Navbar = ({content}) => {
             <Menu.Item key="user" icon={<UserOutlined />}>
               User: Name
             </Menu.Item>
-            <Menu.Item key="logout" danger={true} icon={<LogoutOutlined />}>
+            <Menu.Item
+              key="logout"
+              danger={true}
+              icon={<LogoutOutlined />}
+              onClick={() => {
+                localStorage.clear();
+                history.push("/login");
+              }}
+            >
               Logout
             </Menu.Item>
           </Menu>

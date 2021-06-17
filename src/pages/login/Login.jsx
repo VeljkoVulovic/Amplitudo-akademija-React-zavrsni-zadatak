@@ -5,6 +5,7 @@ import { Form, Input, Button } from "antd";
 import { MailOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
 import "./Login.css";
 import { login } from "../../services/account";
+import { useMutation } from "react-query";
 
 const Login = () => {
   const history = useHistory();
@@ -15,16 +16,18 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const loginMutation = useMutation((data) => login(data), {
+    onSuccess: (response) => {
+      localStorage.setItem("jwt-token", response?.data["access_token"]);
+      history.push("/home");
+    },
+    onError: (error) => {
+      setErrorMessage(error?.response?.data?.error);
+    },
+  });
+
   const onSubmit = (data) => {
-    login(data)
-      .then(function (response) {
-        localStorage.setItem("jwt-token", response?.data["access_token"]);
-        history.push("/home");
-      })
-      .catch(function (error) {
-        console.log(error?.response?.data);
-        setErrorMessage(error?.response?.data?.error);
-      });
+    loginMutation.mutate(data);
   };
 
   const onError = (errors) => {
@@ -55,7 +58,6 @@ const Login = () => {
                 message: "Please input email!",
               },
             })}
-            rules={[{ required: true, message: "Please input your email!" }]}
           />
           {errors?.email?.message !== "" ? (
             <span className="errorSpan">{errors?.email?.message}</span>
@@ -104,7 +106,6 @@ const Login = () => {
           <div className="errorMessage">{errorMessage}</div>
         ) : null}
       </div>
-
       <div className="rightLoginDiv"></div>
     </div>
   );

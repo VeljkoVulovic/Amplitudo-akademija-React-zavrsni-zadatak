@@ -13,6 +13,11 @@ import background from "../../images/full_background.png";
 import logo from "../../images/sixt_car_rental.jpg";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
+import { info } from "../../services/account";
+import { useQuery } from "react-query";
+import CarForm from "../forms/CarForm";
+import ClientForm from "../forms/ClientForm";
+import { useModal } from "../../contexts/ModalContext";
 
 const { Header, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -20,6 +25,8 @@ const { SubMenu } = Menu;
 const Navbar = ({ content }) => {
   const [collapsed, setCollapsed] = useState(true);
   const history = useHistory();
+  const { data: infoResponse } = useQuery("info", info);
+  const { open } = useModal();
 
   const onCollapse = (collapsed) => {
     setCollapsed((prevState) => !prevState);
@@ -82,13 +89,31 @@ const Navbar = ({ content }) => {
             style={{ float: "right", margin: "0" }}
           >
             <SubMenu key="options" icon={<PlusSquareOutlined />} title="Add">
-              <Menu.Item key="option:1" icon={<TeamOutlined />}>
+              <Menu.Item
+                key="option:1"
+                icon={<TeamOutlined />}
+                onClick={() =>
+                  open({
+                    title: `Add new car`,
+                    content: <ClientForm />,
+                  })
+                }
+              >
                 Add new Client
               </Menu.Item>
-              <Menu.Item key="option:2" icon={<CarOutlined />}>
+              <Menu.Item
+                key="option:2"
+                icon={<CarOutlined />}
+                onClick={() =>
+                  open({
+                    title: `Add new car`,
+                    content: <CarForm />,
+                  })
+                }
+              >
                 Add new Car
               </Menu.Item>
-              <Menu.Item key="option:3" icon={<SolutionOutlined />}>
+              <Menu.Item disabled key="option:3" icon={<SolutionOutlined />}>
                 Add new Reservation
               </Menu.Item>
               <Menu.ItemGroup title="- Choose language -">
@@ -101,7 +126,7 @@ const Navbar = ({ content }) => {
               </Menu.ItemGroup>
             </SubMenu>
             <Menu.Item key="user" icon={<UserOutlined />}>
-              User: Name
+              User: {infoResponse?.data.name}
             </Menu.Item>
             <Menu.Item
               key="logout"

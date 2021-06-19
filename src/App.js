@@ -10,6 +10,9 @@ const Login = React.lazy(() => import("./pages/login/Login"));
 const Home = React.lazy(() => import("./pages/home/Home"));
 const Clients = React.lazy(() => import("./pages/clients/Clients"));
 const Cars = React.lazy(() => import("./pages/cars/Cars"));
+const Reservations = React.lazy(() =>
+  import("./pages/reservations/Reservations")
+);
 
 const queryClient = new QueryClient();
 
@@ -54,6 +57,16 @@ function App() {
               component={() => (
                 <Suspense fallback={<Loader />}>
                   <Cars />
+                </Suspense>
+              )}
+              isPrivate
+            />
+            <PrivateRoute
+              path="/reservations"
+              exact
+              component={() => (
+                <Suspense fallback={<Loader />}>
+                  <Reservations />
                 </Suspense>
               )}
               isPrivate

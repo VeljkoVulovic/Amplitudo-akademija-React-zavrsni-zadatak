@@ -1,7 +1,12 @@
 import axiosInstance from "./axios";
 
-export const getCars = () => {
-  return axiosInstance.get(`/vehicles`);
+export const getCars = ({ pageParam = 1, queryKey }) => {
+  const { search } = queryKey[1];
+  return axiosInstance.get(`/vehicles?page=${pageParam}`, {
+    params: {
+      search: search,
+    },
+  });
 };
 
 export const storeCar = (data) => {

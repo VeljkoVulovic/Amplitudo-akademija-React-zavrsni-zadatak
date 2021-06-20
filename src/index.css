@@ -89,3 +89,10 @@ thead[class*="ant-table-thead"] th {
 .ant-form-item {
   margin-bottom: 0px !important;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-top: 25px;
+}

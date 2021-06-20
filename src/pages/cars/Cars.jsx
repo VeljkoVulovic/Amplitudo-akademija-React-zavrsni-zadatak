@@ -1,7 +1,7 @@
-import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import React, { useState, useEffect } from "react";
+import { useMutation, useQueryClient, useInfiniteQuery } from "react-query";
 import { getCars, deleteCar } from "../../services/cars";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Input } from "antd";
 import { useModal } from "../../contexts/ModalContext";
 import CarForm from "../../components/forms/CarForm";
 import {
@@ -12,10 +12,10 @@ import {
 
 const Cars = () => {
   const queryClient = useQueryClient();
-  const { data: getCarsResponse } = useQuery("getCars", getCars);
-  const newData = getCarsResponse?.data?.data;
   const { open } = useModal();
   const { confirm } = Modal;
+  const { Search } = Input;
+  const [search, setSearch] = useState("");
 
   const deleteMutation = useMutation((id) => deleteCar(id), {
     onSuccess: () => {
@@ -32,6 +32,31 @@ const Cars = () => {
       content: <CarForm id={record?.id} />,
     });
   };
+
+  const {
+    data: getCarsResponse,
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(["vehicle", { search }], getCars, {
+    getNextPageParam: (lastPage) => {
+      return lastPage.data.current_page === lastPage.data.last_page
+        ? undefined
+        : lastPage.data.current_page + 1;
+    },
+  });
+
+  useEffect(() => {
+    let data = document.querySelector(".ant-table-body");
+    data.addEventListener("scroll", (event) => {
+      if (
+        event.target.scrollTop ===
+        event.target.scrollHeight - event.target.clientHeight
+      ) {
+        fetchNextPage();
+      }
+    });
+  });
 
   const columns = [
     { key: "id", dataIndex: "id", title: "Id", width: "80px" },
@@ -107,9 +132,18 @@ const Cars = () => {
     },
   ];
 
+  const onSearch = (data) => {
+    setSearch(data);
+  };
+
+  const newData = [];
+  getCarsResponse?.pages.forEach((page) => {
+    newData.push(...page.data.data);
+  });
+
   return (
     <div>
-      <div style={{ width: "105px", margin: "20px auto" }}>
+      <div className="header">
         <Button
           onClick={() =>
             open({
@@ -121,13 +155,22 @@ const Cars = () => {
         >
           Add Car
         </Button>
+        <Search
+          style={{ width: "150px" }}
+          placeholder="Search plate number..."
+          onSearch={onSearch}
+          loading={isFetching}
+          allowClear
+        />
       </div>
       <div className="tableDiv">
         <Table
           columns={columns}
           dataSource={newData}
+          loading={isFetchingNextPage}
+          scroll={{ y: 550 }}
           pagination={false}
-          rowKey={(record) => record.id}
+          rowKey={(record) => record?.id}
           onRow={(record) => {
             return {
               onClick: () => {

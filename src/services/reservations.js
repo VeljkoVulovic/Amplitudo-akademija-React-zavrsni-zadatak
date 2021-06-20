@@ -1,7 +1,7 @@
 import axiosInstance from "./axios";
 
-export const getReservations = () => {
-  return axiosInstance.get(`/reservations`);
+export const getReservations = ({ pageParam = 1 }) => {
+  return axiosInstance.get(`/reservations?page=${pageParam}`);
 };
 
 export const storeReservation = (data) => {

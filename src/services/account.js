@@ -10,6 +10,10 @@ export const login = (data) => {
   });
 };
 
+export const logout = () => {
+  return axiosInstance.post(`/auth/logout`);
+};
+
 export const info = () => {
   return axiosInstance.post(`/auth/me`);
 };

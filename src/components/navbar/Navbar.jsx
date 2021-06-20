@@ -13,8 +13,8 @@ import background from "../../images/full_background.png";
 import logo from "../../images/sixt_car_rental.jpg";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
-import { info } from "../../services/account";
-import { useQuery } from "react-query";
+import { info, logout } from "../../services/account";
+import { useQuery, useMutation } from "react-query";
 import CarForm from "../forms/CarForm";
 import ClientForm from "../forms/ClientForm";
 import { useModal } from "../../contexts/ModalContext";
@@ -27,6 +27,20 @@ const Navbar = ({ content }) => {
   const history = useHistory();
   const { data: infoResponse } = useQuery("info", info);
   const { open } = useModal();
+
+  const logoutMutation = useMutation(() => logout(), {
+    onSuccess: (response) => {
+      localStorage.clear();
+      history.push("/login");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const logoutClick = () => {
+    logoutMutation.mutate();
+  };
 
   const onCollapse = (collapsed) => {
     setCollapsed((prevState) => !prevState);
@@ -117,10 +131,10 @@ const Navbar = ({ content }) => {
                 Add new Reservation
               </Menu.Item>
               <Menu.ItemGroup title="- Choose language -">
-                <Menu.Item key="option:4" icon={<ReadOutlined />}>
+                <Menu.Item disabled key="option:4" icon={<ReadOutlined />}>
                   MNE
                 </Menu.Item>
-                <Menu.Item key="option:5" icon={<ReadOutlined />}>
+                <Menu.Item disabled key="option:5" icon={<ReadOutlined />}>
                   ENG
                 </Menu.Item>
               </Menu.ItemGroup>
@@ -133,8 +147,7 @@ const Navbar = ({ content }) => {
               danger={true}
               icon={<LogoutOutlined />}
               onClick={() => {
-                localStorage.clear();
-                history.push("/login");
+                logoutClick();
               }}
             >
               Logout

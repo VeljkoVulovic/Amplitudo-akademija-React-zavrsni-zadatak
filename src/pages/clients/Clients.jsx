@@ -1,21 +1,22 @@
-import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import React, { useState, useEffect } from "react";
+import { useMutation, useQueryClient, useInfiniteQuery } from "react-query";
 import { getClients, deleteClient } from "../../services/clients";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Input } from "antd";
 import { useModal } from "../../contexts/ModalContext";
 import ClientForm from "../../components/forms/ClientForm";
 import {
   DeleteFilled,
   EditFilled,
   PlusSquareOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 
 const Clients = () => {
   const queryClient = useQueryClient();
-  const { data: getClientsResponse } = useQuery("getClients", getClients);
-  const newData = getClientsResponse?.data?.data;
   const { open } = useModal();
   const { confirm } = Modal;
+  const { Search } = Input;
+  const [search, setSearch] = useState("");
 
   const deleteMutation = useMutation((id) => deleteClient(id), {
     onSuccess: () => {
@@ -29,9 +30,34 @@ const Clients = () => {
   const editButtonClick = (record) => {
     open({
       title: `Edit client - ${record?.name}`,
-      content: <ClientForm id={record?.id} />,
+      content: <ClientForm id={record?.user.id} />,
     });
   };
+
+  const {
+    data: getClientsResponse,
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(["clients", { search }], getClients, {
+    getNextPageParam: (lastPage) => {
+      return lastPage.data.current_page === lastPage.data.last_page
+        ? undefined
+        : lastPage.data.current_page + 1;
+    },
+  });
+
+  useEffect(() => {
+    let data = document.querySelector(".ant-table-body");
+    data.addEventListener("scroll", (event) => {
+      if (
+        event.target.scrollTop ===
+        event.target.scrollHeight - event.target.clientHeight
+      ) {
+        fetchNextPage();
+      }
+    });
+  });
 
   const columns = [
     {
@@ -67,7 +93,20 @@ const Clients = () => {
           }
           onClick={(e) => {
             e.stopPropagation();
-            editButtonClick(record);
+            if (record?.user.id) {
+              editButtonClick(record);
+            } else {
+              confirm({
+                title: "This user is not client.",
+                icon: <ExclamationCircleOutlined />,
+                onOk() {
+                  console.log("OK");
+                },
+                onCancel() {
+                  console.log("Cancel");
+                },
+              });
+            }
           }}
         >
           Edit
@@ -87,7 +126,7 @@ const Clients = () => {
               content: `This action will also delete all reservations tied to client ${record?.name}!`,
               okType: "danger",
               onOk() {
-                deleteMutation.mutate(record.id);
+                deleteMutation.mutate(record?.user.id);
               },
               onCancel() {},
             });
@@ -101,9 +140,18 @@ const Clients = () => {
     },
   ];
 
+  const onSearch = (data) => {
+    setSearch(data);
+  };
+
+  const newData = [];
+  getClientsResponse?.pages.forEach((page) => {
+    newData.push(...page.data.data);
+  });
+
   return (
     <div>
-      <div style={{ width: "105px", margin: "20px auto" }}>
+      <div className="header">
         <Button
           onClick={() =>
             open({
@@ -115,20 +163,44 @@ const Clients = () => {
         >
           Add Client
         </Button>
+        <Search
+          style={{ width: "150px" }}
+          placeholder="Search name..."
+          onSearch={onSearch}
+          loading={isFetching}
+          allowClear
+        />
       </div>
       <div className="tableDiv">
         <Table
           columns={columns}
           dataSource={newData}
+          loading={isFetchingNextPage}
+          scroll={{ y: 480 }}
           pagination={false}
-          rowKey={(record) => record.id}
+          rowKey={(record) => record?.id}
           onRow={(record) => {
             return {
               onClick: () => {
-                open({
-                  title: `Info - ${record?.name}`,
-                  content: <ClientForm id={record?.id} disabled={true} />,
-                });
+                if (record?.user?.id) {
+                  open({
+                    title: `Info - ${record?.name}`,
+                    content: (
+                      <ClientForm id={record?.user.id} disabled={true} />
+                    ),
+                  });
+                } else {
+                  confirm({
+                    title: "This user is not client.",
+                    icon: <ExclamationCircleOutlined />,
+                    onOk() {
+                      console.log("OK");
+                    },
+                    onCancel() {
+                      console.log("Cancel");
+                    },
+                  });
+                }
               },
             };
           }}

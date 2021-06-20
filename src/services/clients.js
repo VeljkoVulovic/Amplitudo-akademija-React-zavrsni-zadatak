@@ -1,7 +1,12 @@
 import axiosInstance from "./axios";
 
-export const getClients = () => {
-  return axiosInstance.get(`/clients`);
+export const getClients = ({ pageParam = 1, queryKey }) => {
+  const { search } = queryKey[1];
+  return axiosInstance.get(`/clients?page=${pageParam}`, {
+    params: {
+      search: search,
+    },
+  });
 };
 
 export const storeClient = (data) => {

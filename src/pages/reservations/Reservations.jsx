@@ -1,5 +1,5 @@
-import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import React, { useEffect } from "react";
+import { useMutation, useQueryClient, useInfiniteQuery } from "react-query";
 import {
   getReservations,
   deleteReservation,
@@ -7,24 +7,15 @@ import {
 import { Table, Button, Modal } from "antd";
 import { useModal } from "../../contexts/ModalContext";
 import ReservationForm from "../../components/forms/ReservationForm";
-import {
-  DeleteFilled,
-  EditFilled,
-  PlusSquareOutlined,
-} from "@ant-design/icons";
+import { DeleteFilled, EditFilled } from "@ant-design/icons";
 
 const Cars = () => {
   const queryClient = useQueryClient();
-  const { data: getReservationsResponse } = useQuery(
-    "getReservations",
-    getReservations
-  );
-  const newData = getReservationsResponse?.data?.data;
   const { open } = useModal();
   const { confirm } = Modal;
 
   const deleteMutation = useMutation((id) => deleteReservation(id), {
-    onSuccess: ()  => {
+    onSuccess: () => {
       queryClient.invalidateQueries("reservations");
     },
     onError: (error) => {
@@ -38,6 +29,30 @@ const Cars = () => {
       content: <ReservationForm id={record?.id} />,
     });
   };
+
+  const {
+    data: getReservationsResponse,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery("reservations", getReservations, {
+    getNextPageParam: (lastPage) => {
+      return lastPage.data.current_page === lastPage.data.last_page
+        ? undefined
+        : lastPage.data.current_page + 1;
+    },
+  });
+
+  useEffect(() => {
+    let data = document.querySelector(".ant-table-body");
+    data.addEventListener("scroll", (event) => {
+      if (
+        event.target.scrollTop ===
+        event.target.scrollHeight - event.target.clientHeight
+      ) {
+        fetchNextPage();
+      }
+    });
+  });
 
   const columns = [
     {
@@ -123,28 +138,22 @@ const Cars = () => {
     },
   ];
 
+  const newData = [];
+  getReservationsResponse?.pages.forEach((page) => {
+    newData.push(...page.data.data);
+  });
+
   return (
     <div>
-      <div style={{ width: "105px", margin: "20px auto" }}>
-        <Button
-          disabled
-          onClick={() =>
-            open({
-              title: `Add new reservation`,
-              content: <ReservationForm />,
-            })
-          }
-          icon={<PlusSquareOutlined style={{ color: "green" }} />}
-        >
-          Add Reservation
-        </Button>
-      </div>
+      <div className="header"></div>
       <div className="tableDiv">
         <Table
           columns={columns}
           dataSource={newData}
+          loading={isFetchingNextPage}
+          scroll={{ y: 480 }}
           pagination={false}
-          rowKey={(record) => record.id}
+          rowKey={(record) => record?.id}
           onRow={(record) => {
             return {
               onClick: () => {

@@ -13,6 +13,7 @@ import { storeCar, getCarTypes, updateCar, showCar } from "../../services/cars";
 import TextArea from "antd/lib/input/TextArea";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useModal } from "../../contexts/ModalContext";
+import PropTypes from "prop-types";
 
 const CarForm = ({ id, disabled }) => {
   const queryClient = useQueryClient();
@@ -36,12 +37,22 @@ const CarForm = ({ id, disabled }) => {
 
   const addMutation = useMutation((data) => storeCar(data), {
     onSuccess: () => {
-      queryClient.invalidateQueries("cars");
+      queryClient.invalidateQueries("vehicle");
       setErrorMessage("");
       close();
     },
     onError: (error) => {
-      setErrorMessage(error?.response?.data?.message);
+      console.log(error);
+      if (
+        error?.response?.data?.message ===
+        "Invalid argument supplied for foreach()"
+      ) {
+        queryClient.invalidateQueries("vehicle");
+        setErrorMessage("");
+        close();
+      } else {
+        setErrorMessage(error?.response?.data?.message);
+      }
     },
   });
 
@@ -50,13 +61,21 @@ const CarForm = ({ id, disabled }) => {
     (data) => updateCar(data, id),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("cars");
+        queryClient.invalidateQueries("vehicle");
         setErrorMessage("");
         close();
       },
       onError: (error) => {
-        console.log(error.response);
-        setErrorMessage(error?.response?.data?.message);
+        if (
+          error?.response?.data?.message ===
+          "Invalid argument supplied for foreach()"
+        ) {
+          queryClient.invalidateQueries("vehicle");
+          setErrorMessage("");
+          close();
+        } else {
+          setErrorMessage(error?.response?.data?.message);
+        }
       },
     }
   );
@@ -65,9 +84,10 @@ const CarForm = ({ id, disabled }) => {
     if (!id) {
       addMutation.mutate(data);
     } else {
+      let year = "" + data.production_year;
       editMutation.mutate({
         plate_no: data.plate_no,
-        production_year: data.production_year,
+        production_year: year,
         car_type_id: data.car_type_id,
         no_of_seats: data.no_of_seats,
         price_per_day: data.price_per_day,
@@ -106,6 +126,7 @@ const CarForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 disabled={disabled}
+                autoComplete="off"
                 placeholder="Plate number"
                 prefix={<IdcardOutlined className="site-form-item-icon" />}
               />
@@ -134,6 +155,7 @@ const CarForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 disabled={disabled}
+                autoComplete="off"
                 placeholder="Production year"
                 prefix={<CalendarOutlined className="site-form-item-icon" />}
               />
@@ -142,6 +164,14 @@ const CarForm = ({ id, disabled }) => {
               required: {
                 value: true,
                 message: "Please enter production year!",
+              },
+              min: {
+                value: 1950,
+                message: "Production year cant be under 1950!",
+              },
+              max: {
+                value: new Date().getFullYear(),
+                message: "Production year cant be over this year!",
               },
             }}
           />
@@ -187,6 +217,7 @@ const CarForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 disabled={disabled}
+                autoComplete="off"
                 placeholder="Number of seats"
                 prefix={
                   <InsertRowRightOutlined className="site-form-item-icon" />
@@ -201,6 +232,14 @@ const CarForm = ({ id, disabled }) => {
               pattern: {
                 value: /^[0-9]{1,2}$/,
                 message: "Please enter a valid number of seats",
+              },
+              min: {
+                value: 1,
+                message: "Minimum number of seats: 1.",
+              },
+              max: {
+                value: 55,
+                message: "Maximum number of seats: 55.",
               },
             }}
           />
@@ -217,6 +256,7 @@ const CarForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 disabled={disabled}
+                autoComplete="off"
                 placeholder="Price per day"
                 prefix={<EuroOutlined className="site-form-item-icon" />}
               />
@@ -225,6 +265,18 @@ const CarForm = ({ id, disabled }) => {
               required: {
                 value: true,
                 message: "Please enter price per day!",
+              },
+              min: {
+                value: 30,
+                message: "Minimum price per day - 30.",
+              },
+              max: {
+                value: 150,
+                message: "Maximum price per day - 150.",
+              },
+              pattern: {
+                value: /^[0-9]{1,3}$/,
+                message: "Please enter a valid price per day",
               },
             }}
           />
@@ -253,15 +305,17 @@ const CarForm = ({ id, disabled }) => {
               />
             )}
           />
-          <Button
-            style={{ width: "120px", marginTop: "35px" }}
-            icon={<CloudUploadOutlined className="site-form-item-icon" />}
-            type="primary"
-            onClick={handleSubmit(onSubmit)}
-            disabled={disabled}
-          >
-            Submit
-          </Button>
+          <div className="header">
+            <Button
+              style={{ width: "120px", marginTop: "35px" }}
+              icon={<CloudUploadOutlined className="site-form-item-icon" />}
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              disabled={disabled}
+            >
+              Submit
+            </Button>
+          </div>
         </Form>
         {errorMessage !== "" ? (
           <div className="errorMessage">{errorMessage}</div>
@@ -272,3 +326,8 @@ const CarForm = ({ id, disabled }) => {
 };
 
 export default CarForm;
+
+CarForm.propTypes = {
+  id: PropTypes.number,
+  disabled: PropTypes.bool,
+};

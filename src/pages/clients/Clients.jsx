@@ -27,10 +27,10 @@ const Clients = () => {
     },
   });
 
-  const editButtonClick = (record) => {
+  const editButtonClick = (id) => {
     open({
-      title: `Edit client - ${record?.name}`,
-      content: <ClientForm id={record?.user.id} />,
+      title: `Edit client - ${id}`,
+      content: <ClientForm id={id} />,
     });
   };
 
@@ -79,7 +79,11 @@ const Clients = () => {
       dataIndex: "date_of_last_reservation",
       title: "Date of last reservation",
     },
-    { key: "remarks", dataIndex: "remarks", title: "Remarks", ellipsis: true },
+    {
+      key: "country_id",
+      dataIndex: ["country", "name"],
+      title: "Country",
+    },
     {
       key: "edit",
       title: "Edit",
@@ -93,11 +97,11 @@ const Clients = () => {
           }
           onClick={(e) => {
             e.stopPropagation();
-            if (record?.user.id) {
-              editButtonClick(record);
+            if (record?.user?.id) {
+              editButtonClick(record?.user.id);
             } else {
               confirm({
-                title: "This user is not client.",
+                title: "This user dont have client data.",
                 icon: <ExclamationCircleOutlined />,
                 onOk() {
                   console.log("OK");
@@ -120,16 +124,28 @@ const Clients = () => {
         <Button
           onClick={(e) => {
             e.stopPropagation();
-            confirm({
-              title: `Do you want to delete client ${record?.name}?`,
-              icon: <DeleteFilled style={{ color: "red" }} />,
-              content: `This action will also delete all reservations tied to client ${record?.name}!`,
-              okType: "danger",
-              onOk() {
-                deleteMutation.mutate(record?.user.id);
-              },
-              onCancel() {},
-            });
+            if (record?.user?.id) {
+              confirm({
+                title: `Do you want to delete client ${record?.name}?`,
+                icon: <DeleteFilled style={{ color: "red" }} />,
+                okType: "danger",
+                onOk() {
+                  deleteMutation.mutate(record?.user.id);
+                },
+                onCancel() {},
+              });
+            } else {
+              confirm({
+                title: "This user dont have client data. You cant delete it.",
+                icon: <ExclamationCircleOutlined />,
+                onOk() {
+                  console.log("OK");
+                },
+                onCancel() {
+                  console.log("Cancel");
+                },
+              });
+            }
           }}
           icon={<DeleteFilled style={{ color: "red" }} />}
         >
@@ -186,12 +202,12 @@ const Clients = () => {
                   open({
                     title: `Info - ${record?.name}`,
                     content: (
-                      <ClientForm id={record?.user.id} disabled={true} />
+                      <ClientForm id={record?.user?.id} disabled={true} />
                     ),
                   });
                 } else {
                   confirm({
-                    title: "This user is not client.",
+                    title: "This user dont have client data.",
                     icon: <ExclamationCircleOutlined />,
                     onOk() {
                       console.log("OK");

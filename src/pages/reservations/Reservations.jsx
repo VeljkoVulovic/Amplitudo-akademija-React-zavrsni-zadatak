@@ -9,7 +9,7 @@ import { useModal } from "../../contexts/ModalContext";
 import ReservationForm from "../../components/forms/ReservationForm";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 
-const Cars = () => {
+const Reservations = () => {
   const queryClient = useQueryClient();
   const { open } = useModal();
   const { confirm } = Modal;
@@ -170,4 +170,4 @@ const Cars = () => {
   );
 };
 
-export default Cars;
+export default Reservations;

@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
+import PropTypes from "prop-types";
 
 const ModalComponent = ({
   title = "",
@@ -21,3 +22,10 @@ const ModalComponent = ({
 };
 
 export default ModalComponent;
+
+ModalComponent.propTypes = {
+  title: PropTypes.number,
+  children: PropTypes.node,
+  isModalOpen: PropTypes.bool,
+  setIsModalOpen: PropTypes.bool,
+};

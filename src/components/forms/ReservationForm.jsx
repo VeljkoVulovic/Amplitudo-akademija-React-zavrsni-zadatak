@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button, Select, Spin, DatePicker, Popover } from "antd";
 import { useForm, Controller } from "react-hook-form";
-import { CloudUploadOutlined } from "@ant-design/icons";
+import {
+  CloudUploadOutlined,
+  CarOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import {
   updateReservation,
   showReservation,
@@ -10,6 +14,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useModal } from "../../contexts/ModalContext";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const ReservationForm = ({ id, disabled }) => {
   const queryClient = useQueryClient();
@@ -117,7 +122,7 @@ const ReservationForm = ({ id, disabled }) => {
       {showReservationResponse?.data?.equipment?.map((equipment, index) => {
         return (
           <p key={index}>
-            Equipment {index + 1} : {equipment.name} - (quantity{" "}
+            Equipment {index + 1} : {equipment.name} - (x
             {equipment.pivot.quantity})
           </p>
         );
@@ -128,22 +133,26 @@ const ReservationForm = ({ id, disabled }) => {
   return (
     <>
       <Spin spinning={isLoading}>
-        <Popover placement="bottom" content={carContent} title="Car info">
-          <Button type="primary">Car info</Button>
-        </Popover>
-        {disabled !== true ? (
-          <Popover
-            placement="bottom"
-            content={clientContent}
-            title="Client info"
-          >
-            <Button hidden={disabled} type="primary">
-              Client info
+        <div className="popoverDiv">
+          <Popover placement="bottom" content={carContent} title="Car info">
+            <Button icon={<CarOutlined />} shape="round">
+              Car info
             </Button>
           </Popover>
-        ) : (
-          <></>
-        )}
+          {disabled !== true ? (
+            <Popover
+              placement="bottom"
+              content={clientContent}
+              title="Client info"
+            >
+              <Button icon={<UserOutlined />} shape="round" hidden={disabled}>
+                Client info
+              </Button>
+            </Popover>
+          ) : (
+            <></>
+          )}
+        </div>
         <Form onSubmit={handleSubmit(onError)}>
           <Form.Item label="From date"></Form.Item>
           <Controller
@@ -251,15 +260,16 @@ const ReservationForm = ({ id, disabled }) => {
           ) : (
             <span className="errorSpan"></span>
           )}
-          <Button
-            style={{ width: "120px", marginTop: "35px" }}
-            icon={<CloudUploadOutlined className="site-form-item-icon" />}
-            type="primary"
-            onClick={handleSubmit(onSubmit)}
-            disabled={disabled}
-          >
-            Submit
-          </Button>
+          <div className="header">
+            <Button
+              icon={<CloudUploadOutlined className="site-form-item-icon" />}
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              disabled={disabled}
+            >
+              Submit
+            </Button>
+          </div>
         </Form>
         {errorMessage !== "" ? (
           <div className="errorMessage">{errorMessage}</div>
@@ -270,3 +280,8 @@ const ReservationForm = ({ id, disabled }) => {
 };
 
 export default ReservationForm;
+
+ReservationForm.propTypes = {
+  id: PropTypes.number,
+  disabled: PropTypes.bool,
+};

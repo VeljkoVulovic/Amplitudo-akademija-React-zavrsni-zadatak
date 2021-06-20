@@ -9,15 +9,15 @@ import {
   LogoutOutlined,
   ReadOutlined,
 } from "@ant-design/icons";
-import background from "../../images/full_background.png";
 import logo from "../../images/sixt_car_rental.jpg";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
-import { info, logout } from "../../services/account";
-import { useQuery, useMutation } from "react-query";
+import { logout } from "../../services/account";
+import { useMutation } from "react-query";
 import CarForm from "../forms/CarForm";
 import ClientForm from "../forms/ClientForm";
 import { useModal } from "../../contexts/ModalContext";
+import PropTypes from "prop-types";
 
 const { Header, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -25,7 +25,6 @@ const { SubMenu } = Menu;
 const Navbar = ({ content }) => {
   const [collapsed, setCollapsed] = useState(true);
   const history = useHistory();
-  const { data: infoResponse } = useQuery("info", info);
   const { open } = useModal();
 
   const logoutMutation = useMutation(() => logout(), {
@@ -95,7 +94,7 @@ const Navbar = ({ content }) => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout style={{ backgroundImage: `url(${background})` }}>
+      <Layout>
         <Header style={{ paddingRight: "0px", marginRight: "5px" }}>
           <Menu
             mode="horizontal"
@@ -140,7 +139,7 @@ const Navbar = ({ content }) => {
               </Menu.ItemGroup>
             </SubMenu>
             <Menu.Item key="user" icon={<UserOutlined />}>
-              User: {infoResponse?.data.name}
+              User:
             </Menu.Item>
             <Menu.Item
               key="logout"
@@ -161,3 +160,7 @@ const Navbar = ({ content }) => {
 };
 
 export default Navbar;
+
+Navbar.propTypes = {
+  content: PropTypes.node,
+};

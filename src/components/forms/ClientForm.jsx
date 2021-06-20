@@ -5,7 +5,6 @@ import {
   IdcardOutlined,
   CalendarOutlined,
   UserOutlined,
-  InfoCircleOutlined,
   MailOutlined,
   CloudUploadOutlined,
 } from "@ant-design/icons";
@@ -15,9 +14,9 @@ import {
   updateClient,
   showClient,
 } from "../../services/clients";
-import TextArea from "antd/lib/input/TextArea";
 import { useModal } from "../../contexts/ModalContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import PropTypes from "prop-types";
 
 const ClientForm = ({ id, disabled }) => {
   const queryClient = useQueryClient();
@@ -70,13 +69,13 @@ const ClientForm = ({ id, disabled }) => {
     if (!id) {
       addMutation.mutate(data);
     } else {
+      let phone_number = parseInt(data.phone_no);
       editMutation.mutate({
         name: data.name,
-        phone_no: data.phone_no,
+        phone_no: phone_number,
         email: data.email,
         identification_document_no: data.identification_document_no,
         country_id: data.country_id,
-        remarks: data.remarks,
       });
     }
   };
@@ -111,6 +110,7 @@ const ClientForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 placeholder="Name"
+                autoComplete="off"
                 disabled={disabled}
                 prefix={<UserOutlined className="site-form-item-icon" />}
               />
@@ -123,6 +123,14 @@ const ClientForm = ({ id, disabled }) => {
               minLength: {
                 value: 4,
                 message: "Minimum length: 4 characters.",
+              },
+              maxLength: {
+                value: 30,
+                message: "Maximum length: 30 characters.",
+              },
+              pattern: {
+                value: /^[a-z ,.'-]+$/i,
+                message: "Please enter valid name!",
               },
             }}
           />
@@ -139,6 +147,7 @@ const ClientForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 disabled={disabled}
+                autoComplete="off"
                 placeholder="Identification document number"
                 prefix={<IdcardOutlined className="site-form-item-icon" />}
               />
@@ -147,6 +156,11 @@ const ClientForm = ({ id, disabled }) => {
               required: {
                 value: true,
                 message: "Please enter identification document no!",
+              },
+              pattern: {
+                value: /^[0-9]{1,3}$/i,
+                message:
+                  "Please enter a valid identification document no! (1 to 3 digit)",
               },
             }}
           />
@@ -179,8 +193,8 @@ const ClientForm = ({ id, disabled }) => {
               },
             }}
           />
-          {errors?.country?.message !== "" ? (
-            <span className="errorSpan">{errors?.country?.message}</span>
+          {errors?.country_id?.message !== "" ? (
+            <span className="errorSpan">{errors?.country_id?.message}</span>
           ) : (
             <span className="errorSpan"></span>
           )}
@@ -192,6 +206,7 @@ const ClientForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 placeholder="Phone"
+                autoComplete="off"
                 disabled={disabled}
                 prefix={<CalendarOutlined className="site-form-item-icon" />}
               />
@@ -200,6 +215,10 @@ const ClientForm = ({ id, disabled }) => {
               required: {
                 value: true,
                 message: "Please enter phone!",
+              },
+              pattern: {
+                value: /^(\+\d{1,3}\s)?\(?\d{2,3}\)?[\s.-]\d{3}[\s.-]\d{3}$/i,
+                message: "Please enter valid phone!",
               },
             }}
           />
@@ -216,6 +235,7 @@ const ClientForm = ({ id, disabled }) => {
               <Input
                 {...field}
                 disabled={disabled}
+                autoComplete="off"
                 placeholder="Email"
                 prefix={<MailOutlined className="site-form-item-icon" />}
               />
@@ -227,7 +247,7 @@ const ClientForm = ({ id, disabled }) => {
               },
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Please enter a valid email",
+                message: "Please enter a valid email! ( example@mail.com )",
               },
               required: {
                 value: true,
@@ -240,36 +260,17 @@ const ClientForm = ({ id, disabled }) => {
           ) : (
             <span className="errorSpan"></span>
           )}
-          <Form.Item
-            label="Remarks"
-            tooltip={{
-              title: "This is a optional field",
-              icon: <InfoCircleOutlined />,
-            }}
-          ></Form.Item>
-          <Controller
-            name="remarks"
-            control={control}
-            render={({ field }) => (
-              <TextArea
-                {...field}
-                disabled={disabled}
-                placeholder="Remarks"
-                showCount
-                maxLength={255}
-              />
-            )}
-          />
-          <Button
-            style={{ width: "120px", marginTop: "35px" }}
-            icon={<CloudUploadOutlined className="site-form-item-icon" />}
-            type="primary"
-            disabled={disabled}
-            onClick={handleSubmit(onSubmit)}
-            htmlType="submit"
-          >
-            Submit
-          </Button>
+          <div className="buttons">
+            <Button
+              icon={<CloudUploadOutlined className="site-form-item-icon" />}
+              type="primary"
+              disabled={disabled}
+              onClick={handleSubmit(onSubmit)}
+              htmlType="submit"
+            >
+              Submit
+            </Button>
+          </div>
         </Form>
         {errorMessage !== "" ? (
           <div className="errorMessage">{errorMessage}</div>
@@ -280,3 +281,8 @@ const ClientForm = ({ id, disabled }) => {
 };
 
 export default ClientForm;
+
+ClientForm.propTypes = {
+  id: PropTypes.number,
+  disabled: PropTypes.bool,
+};

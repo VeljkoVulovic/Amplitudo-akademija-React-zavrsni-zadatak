@@ -19,7 +19,7 @@ const Cars = () => {
 
   const deleteMutation = useMutation((id) => deleteCar(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("cars");
+      queryClient.invalidateQueries("vehicle");
     },
     onError: (error) => {
       console.log(error);
@@ -175,7 +175,7 @@ const Cars = () => {
             return {
               onClick: () => {
                 open({
-                  title: `Info - ${record?.name}`,
+                  title: `Info car ${record?.id} - ${record?.plate_no}`,
                   content: <CarForm id={record?.id} disabled={true} />,
                 });
               },

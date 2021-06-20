@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory } from "react-router";
 import { Result, Button } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
 
 const ErrorHandling = ({ error, errorMessage }) => {
   const history = useHistory();
@@ -27,3 +28,8 @@ const ErrorHandling = ({ error, errorMessage }) => {
 };
 
 export default ErrorHandling;
+
+ErrorHandling.propTypes = {
+  error: PropTypes.string,
+  errorMessage: PropTypes.string,
+};

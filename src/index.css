@@ -4,10 +4,7 @@ body {
   font-family: Helvetica;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("../src/images/full_background.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
+  background-color: rgb(200, 200, 200);
   min-height: 100vh;
 }
 
@@ -95,4 +92,12 @@ thead[class*="ant-table-thead"] th {
   flex-direction: row;
   justify-content: space-evenly;
   margin-top: 25px;
+}
+
+.popoverDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+  color: blue;
 }

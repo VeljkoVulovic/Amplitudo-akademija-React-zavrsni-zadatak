@@ -1,7 +1,13 @@
 import axiosInstance from "./axios";
+import axios from "axios";
 
 export const getReservations = ({ pageParam = 1 }) => {
-  return axiosInstance.get(`/reservations?page=${pageParam}`);
+  return axios({
+    method: "GET",
+    baseURL: "http://akademija-api.proserver.me/api/",
+    url: `/reservations?page=${pageParam}`,
+    headers: { Authorization: `Bearer ${localStorage.getItem("jwt-token")}` },
+  });
 };
 
 export const storeReservation = (data) => {

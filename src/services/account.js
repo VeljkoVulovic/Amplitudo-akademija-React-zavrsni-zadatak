@@ -14,7 +14,7 @@ export const logout = () => {
   return axiosInstance.post(`/auth/logout`);
 };
 
-export const info = () => {
+export const account = () => {
   return axiosInstance.post(`/auth/me`);
 };
 

@@ -10,7 +10,7 @@ const ModalComponent = ({
 }) => {
   return (
     <Modal
-      width="400px"
+      width="380px"
       title={title}
       visible={isModalOpen}
       onCancel={() => setIsModalOpen(false)}
@@ -24,8 +24,8 @@ const ModalComponent = ({
 export default ModalComponent;
 
 ModalComponent.propTypes = {
-  title: PropTypes.number,
+  title: PropTypes.string,
   children: PropTypes.node,
   isModalOpen: PropTypes.bool,
-  setIsModalOpen: PropTypes.bool,
+  setIsModalOpen: PropTypes.func,
 };

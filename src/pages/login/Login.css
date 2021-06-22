@@ -22,3 +22,19 @@
   background-color: rgb(205, 205, 205, 0.7);
   vertical-align: middle;
 }
+
+@media (max-width: 920px) {
+  .rightLoginDiv {
+    display: none;
+  }
+  .loginDiv {
+    width: 700px;
+    background-position: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .loginDiv {
+    width: 350px;
+  }
+}

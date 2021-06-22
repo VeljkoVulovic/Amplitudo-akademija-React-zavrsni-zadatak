@@ -38,7 +38,7 @@ const Cars = () => {
     isFetching,
     fetchNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(["vehicle", { search }], getCars, {
+  } = useInfiniteQuery(["vehicle", { search },2], getCars, {
     getNextPageParam: (lastPage) => {
       return lastPage.data.current_page === lastPage.data.last_page
         ? undefined
@@ -59,30 +59,31 @@ const Cars = () => {
   });
 
   const columns = [
-    { key: "id", dataIndex: "id", title: "Id", width: "80px" },
+    { key: "id", dataIndex: "id", title: "Id" },
     {
       key: "plate_no",
       dataIndex: "plate_no",
       title: "Plate number",
-      width: "150px",
     },
     {
       key: "production_year",
       dataIndex: "production_year",
       title: "Production year",
-      width: "135px",
     },
     {
       key: "car_type_id",
       title: "Car type",
       render: (record) => record.car_type.name,
-      width: "120px",
+    },
+    {
+      key: "price_per_day",
+      dataIndex: "price_per_day",
+      title: "Price per day",
     },
     {
       key: "no_of_seats",
       dataIndex: "no_of_seats",
       title: "No of seats",
-      width: "120px",
     },
     { key: "remarks", dataIndex: "remarks", title: "Remarks", ellipsis: true },
     {
@@ -92,8 +93,7 @@ const Cars = () => {
         <Button
           icon={
             <EditFilled
-              className="site-form-item-icon"
-              style={{ color: "blue" }}
+              className="site-form-item-icon blue"
             />
           }
           onClick={(e) => {
@@ -114,7 +114,7 @@ const Cars = () => {
             e.stopPropagation();
             confirm({
               title: `Do you want to delete car ${record?.id}?`,
-              icon: <DeleteFilled style={{ color: "red" }} />,
+              icon: <DeleteFilled className="red" />,
               content: `This action will also delete all reservations tied to car ${record?.id}!`,
               okType: "danger",
               onOk() {
@@ -123,12 +123,11 @@ const Cars = () => {
               onCancel() {},
             });
           }}
-          icon={<DeleteFilled style={{ color: "red" }} />}
+          icon={<DeleteFilled className="red" />}
         >
           Delete
         </Button>
       ),
-      width: "120px",
     },
   ];
 
@@ -143,7 +142,7 @@ const Cars = () => {
 
   return (
     <div>
-      <div className="header">
+      <div className="buttons">
         <Button
           onClick={() =>
             open({
@@ -151,12 +150,12 @@ const Cars = () => {
               content: <CarForm />,
             })
           }
-          icon={<PlusSquareOutlined style={{ color: "green" }} />}
+          icon={<PlusSquareOutlined className="green" />}
         >
           Add Car
         </Button>
         <Search
-          style={{ width: "150px" }}
+          className="searchFilter"
           placeholder="Search plate number..."
           onSearch={onSearch}
           loading={isFetching}
@@ -168,7 +167,7 @@ const Cars = () => {
           columns={columns}
           dataSource={newData}
           loading={isFetchingNextPage}
-          scroll={{ y: 550 }}
+          scroll={{ x: "1200px", y: "500px" }}
           pagination={false}
           rowKey={(record) => record?.id}
           onRow={(record) => {

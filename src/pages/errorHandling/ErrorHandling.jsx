@@ -13,14 +13,15 @@ const ErrorHandling = ({ error, errorMessage }) => {
         title={"Error " + error}
         subTitle={errorMessage}
         extra={
-          <Button
-            style={{ width: "150px", marginTop: "15px" }}
-            icon={<HomeOutlined className="site-form-item-icon" />}
-            type="primary"
-            onClick={() => history.push("/login")}
-          >
-            Back Home
-          </Button>
+          <div className="buttons">
+            <Button
+              icon={<HomeOutlined className="site-form-item-icon" />}
+              type="primary"
+              onClick={() => history.push("/login")}
+            >
+              Back Home
+            </Button>
+          </div>
         }
       />
     </div>

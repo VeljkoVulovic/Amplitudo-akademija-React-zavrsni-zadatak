@@ -92,15 +92,16 @@ const Login = () => {
           ) : (
             <span className="errorSpan"></span>
           )}
-          <Button
-            style={{ width: "150px", marginTop: "15px" }}
-            shape="round"
-            icon={<LoginOutlined className="site-form-item-icon" />}
-            type="primary"
-            onClick={handleSubmit(onSubmit)}
-          >
-            Log in
-          </Button>
+          <div className="buttons">
+            <Button
+              shape="round"
+              icon={<LoginOutlined className="site-form-item-icon" />}
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Log in
+            </Button>
+          </div>
         </Form>
         {errorMessage !== "" ? (
           <div className="errorMessage">{errorMessage}</div>

@@ -39,7 +39,7 @@ const Clients = () => {
     isFetching,
     fetchNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(["clients", { search }], getClients, {
+  } = useInfiniteQuery(["clients", { search },2], getClients, {
     getNextPageParam: (lastPage) => {
       return lastPage.data.current_page === lastPage.data.last_page
         ? undefined
@@ -64,10 +64,13 @@ const Clients = () => {
       key: "identification_document_no",
       dataIndex: "identification_document_no",
       title: "No of id doc",
-      width: "85px",
     },
-    { key: "name", dataIndex: "name", title: "Name", width: "100px" },
-    { key: "phone_no", dataIndex: "phone_no", title: "Phone" },
+    { key: "name", dataIndex: "name", title: "Name" },
+    {
+      key: "phone_no",
+      dataIndex: "phone_no",
+      title: "Phone",
+    },
     { key: "email", dataIndex: "email", title: "Email" },
     {
       key: "date_of_first_reservation",
@@ -83,6 +86,12 @@ const Clients = () => {
       key: "country_id",
       dataIndex: ["country", "name"],
       title: "Country",
+    },
+    {
+      key: "remarks",
+      dataIndex: "remarks",
+      title: "Remarks",
+      ellipsis: true,
     },
     {
       key: "edit",
@@ -127,7 +136,7 @@ const Clients = () => {
             if (record?.user?.id) {
               confirm({
                 title: `Do you want to delete client ${record?.name}?`,
-                icon: <DeleteFilled style={{ color: "red" }} />,
+                icon: <DeleteFilled className="red" />,
                 okType: "danger",
                 onOk() {
                   deleteMutation.mutate(record?.user.id);
@@ -147,12 +156,11 @@ const Clients = () => {
               });
             }
           }}
-          icon={<DeleteFilled style={{ color: "red" }} />}
+          icon={<DeleteFilled className="red" />}
         >
           Delete
         </Button>
       ),
-      width: "120px",
     },
   ];
 
@@ -167,7 +175,7 @@ const Clients = () => {
 
   return (
     <div>
-      <div className="header">
+      <div className="buttons">
         <Button
           onClick={() =>
             open({
@@ -175,7 +183,7 @@ const Clients = () => {
               content: <ClientForm />,
             })
           }
-          icon={<PlusSquareOutlined style={{ color: "green" }} />}
+          icon={<PlusSquareOutlined className="green" />}
         >
           Add Client
         </Button>
@@ -192,7 +200,7 @@ const Clients = () => {
           columns={columns}
           dataSource={newData}
           loading={isFetchingNextPage}
-          scroll={{ y: 480 }}
+          scroll={{ x: "1200px", y: "500px" }}
           pagination={false}
           rowKey={(record) => record?.id}
           onRow={(record) => {

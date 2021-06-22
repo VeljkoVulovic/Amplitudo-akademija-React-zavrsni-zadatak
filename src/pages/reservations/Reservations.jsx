@@ -34,7 +34,7 @@ const Reservations = () => {
     data: getReservationsResponse,
     fetchNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery("reservations", getReservations, {
+  } = useInfiniteQuery(["reservations", 2], getReservations, {
     getNextPageParam: (lastPage) => {
       return lastPage.data.current_page === lastPage.data.last_page
         ? undefined
@@ -59,7 +59,6 @@ const Reservations = () => {
       key: "client",
       dataIndex: ["client", "name"],
       title: "Client",
-      width: "120px",
     },
     {
       key: "plate_no",
@@ -96,12 +95,7 @@ const Reservations = () => {
       title: "Edit",
       render: (record) => (
         <Button
-          icon={
-            <EditFilled
-              className="site-form-item-icon"
-              style={{ color: "blue" }}
-            />
-          }
+          icon={<EditFilled className="site-form-item-icon blue" />}
           onClick={(e) => {
             e.stopPropagation();
             editButtonClick(record);
@@ -120,7 +114,7 @@ const Reservations = () => {
             e.stopPropagation();
             confirm({
               title: `Do you want to delete reservation ${record?.id}?`,
-              icon: <DeleteFilled style={{ color: "red" }} />,
+              icon: <DeleteFilled className="red" />,
               content: `This action will delete reservation ${record?.id}!`,
               okType: "danger",
               onOk() {
@@ -129,7 +123,7 @@ const Reservations = () => {
               onCancel() {},
             });
           }}
-          icon={<DeleteFilled style={{ color: "red" }} />}
+          icon={<DeleteFilled className="red" />}
         >
           Delete
         </Button>
@@ -145,13 +139,13 @@ const Reservations = () => {
 
   return (
     <div>
-      <div className="header"></div>
+      <div className="buttons"></div>
       <div className="tableDiv">
         <Table
           columns={columns}
           dataSource={newData}
           loading={isFetchingNextPage}
-          scroll={{ y: 480 }}
+          scroll={{ x: "1200px", y: "500px" }}
           pagination={false}
           rowKey={(record) => record?.id}
           onRow={(record) => {

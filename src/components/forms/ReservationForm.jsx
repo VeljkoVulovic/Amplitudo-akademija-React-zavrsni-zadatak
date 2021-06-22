@@ -160,7 +160,7 @@ const ReservationForm = ({ id, disabled }) => {
             control={control}
             render={({ field }) => (
               <DatePicker
-                style={{ width: "100%" }}
+                className="width"
                 {...field}
                 placeholder="From date"
                 disabled={disabled}
@@ -184,7 +184,7 @@ const ReservationForm = ({ id, disabled }) => {
             control={control}
             render={({ field }) => (
               <DatePicker
-                style={{ width: "100%" }}
+                className="width"
                 {...field}
                 placeholder="To date"
                 disabled={disabled}
@@ -208,9 +208,9 @@ const ReservationForm = ({ id, disabled }) => {
             control={control}
             render={({ field }) => (
               <Select
-                style={{ width: "352px" }}
-                disabled={disabled}
                 {...field}
+                disabled={disabled}
+                className="width"
                 placeholder="-- Choose rent location --"
                 options={getLocationsResponse?.data?.map((location) => {
                   return { value: location.id, label: location.name };
@@ -237,9 +237,9 @@ const ReservationForm = ({ id, disabled }) => {
             control={control}
             render={({ field }) => (
               <Select
-                style={{ width: "352px" }}
-                disabled={disabled}
                 {...field}
+                disabled={disabled}
+                className="width"
                 placeholder="-- Choose return location --"
                 options={getLocationsResponse?.data?.map((location) => {
                   return { value: location.id, label: location.name };
@@ -260,7 +260,7 @@ const ReservationForm = ({ id, disabled }) => {
           ) : (
             <span className="errorSpan"></span>
           )}
-          <div className="header">
+          <div className="buttons">
             <Button
               icon={<CloudUploadOutlined className="site-form-item-icon" />}
               type="primary"

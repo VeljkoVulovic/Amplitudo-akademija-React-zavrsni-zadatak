@@ -5,6 +5,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(200, 200, 200);
+}
+
+#root {
   min-height: 100vh;
 }
 
@@ -51,8 +54,7 @@ code {
 }
 
 .tableDiv {
-  margin: 30px auto;
-  width: 1100px;
+  margin: 30px 40px;
   text-align: center;
   border: 1px solid black;
   border-radius: 3px;
@@ -78,16 +80,7 @@ thead[class*="ant-table-thead"] th {
   text-align: center !important;
 }
 
-.ant-select-selection-item {
-  flex: none !important;
-  overflow: none !important;
-}
-
-.ant-form-item {
-  margin-bottom: 0px !important;
-}
-
-.header {
+.buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -100,4 +93,53 @@ thead[class*="ant-table-thead"] th {
   justify-content: space-evenly;
   margin-bottom: 10px;
   color: blue;
+}
+
+.width {
+  width: 100%;
+}
+
+.searchFilter {
+  width: 180px !important;
+}
+
+.red {
+  color: red !important;
+}
+
+.blue {
+  color: blue !important;
+}
+
+.green {
+  color: green !important;
+}
+
+.ant-row {
+  margin-bottom: 8px !important;
+}
+
+.siderMenuGroup {
+  display: none !important;
+}
+
+.ant-menu-root.ant-menu-horizontal {
+  float: right;
+}
+
+@media (max-width: 767px) {
+  aside.ant-layout-sider {
+    display: none;
+  }
+  .siderMenuGroup {
+    display: block !important;
+  }
+  .ant-form .ant-form-item .ant-form-item-label,
+  .ant-form .ant-form-item .ant-form-item-control {
+    flex: none !important;
+    padding: 0px !important;
+  }
+  .tableDiv {
+    margin: 30px 10px;
+  }
 }

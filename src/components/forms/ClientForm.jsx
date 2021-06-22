@@ -7,6 +7,7 @@ import {
   UserOutlined,
   MailOutlined,
   CloudUploadOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons";
 import {
   storeClient,
@@ -17,6 +18,7 @@ import {
 import { useModal } from "../../contexts/ModalContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import PropTypes from "prop-types";
+import TextArea from "antd/lib/input/TextArea";
 
 const ClientForm = ({ id, disabled }) => {
   const queryClient = useQueryClient();
@@ -45,7 +47,7 @@ const ClientForm = ({ id, disabled }) => {
       close();
     },
     onError: (error) => {
-      setErrorMessage(error?.response?.data?.errors);
+      setErrorMessage(error?.response?.data?.message);
     },
   });
 
@@ -177,9 +179,9 @@ const ClientForm = ({ id, disabled }) => {
             control={control}
             render={({ field }) => (
               <Select
-                style={{ width: "352px" }}
-                disabled={disabled}
                 {...field}
+                className="width"
+                disabled={disabled}
                 placeholder="-- Choose country --"
                 options={getCountriesResponse?.data?.map((country) => {
                   return { value: country.id, label: country.name };
@@ -260,6 +262,26 @@ const ClientForm = ({ id, disabled }) => {
           ) : (
             <span className="errorSpan"></span>
           )}
+          <Form.Item
+            label="Remarks"
+            tooltip={{
+              title: "This is a optional field",
+              icon: <InfoCircleOutlined />,
+            }}
+          ></Form.Item>
+          <Controller
+            name="remarks"
+            control={control}
+            render={({ field }) => (
+              <TextArea
+                {...field}
+                disabled={disabled}
+                placeholder="Remarks"
+                showCount
+                maxLength={255}
+              />
+            )}
+          />
           <div className="buttons">
             <Button
               icon={<CloudUploadOutlined className="site-form-item-icon" />}

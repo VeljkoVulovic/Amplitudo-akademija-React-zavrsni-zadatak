@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Layout, Menu, Image } from "antd";
+import { Layout, Menu } from "antd";
 import {
   TeamOutlined,
   SolutionOutlined,
   CarOutlined,
-  PlusSquareOutlined,
   UserOutlined,
   LogoutOutlined,
   ReadOutlined,
+  ControlOutlined,
 } from "@ant-design/icons";
-import logo from "../../images/sixt_car_rental.jpg";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
 import { logout } from "../../services/account";
@@ -42,66 +41,48 @@ const Navbar = ({ content }) => {
   };
 
   const onCollapse = (collapsed) => {
-    setCollapsed((prevState) => !prevState);
+    setCollapsed(collapsed);
   };
 
   return (
-    <Layout style={{ minHeight: "100vh", backgroundColor: "black" }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={() => onCollapse()}>
-        <Menu theme="dark" mode="inline">
+    <Layout style={{ minHeight: "100vh" }}>
+      <Header>
+        <Menu mode="horizontal" theme={"dark"}>
           <Menu.Item
-            style={{ backgroundColor: "#000f1d" }}
-            key="1"
-            icon={
-              <Image
-                preview={false}
-                style={{
-                  width: "60px",
-                  height: "30px",
-                  marginTop: "12px",
-                  marginLeft: "-18px",
-                  marginRight: "10px",
-                }}
-                src={logo}
-              />
-            }
+            key="logo"
             onClick={() => history.push("/home")}
-          ></Menu.Item>
-          <Menu.Item
-            key="2"
-            icon={<TeamOutlined />}
-            title="Clients"
-            style={{ marginTop: "20px" }}
-            onClick={() => history.push("/clients")}
+            className="logo"
           >
-            Clients
+            RENT A CAR
           </Menu.Item>
-          <Menu.Item
-            key="3"
-            icon={<CarOutlined />}
-            title="Cars"
-            onClick={() => history.push("/cars")}
-          >
-            Cars
-          </Menu.Item>
-          <Menu.Item
-            key="4"
-            icon={<SolutionOutlined />}
-            title="Reservations"
-            onClick={() => history.push("/reservations")}
-          >
-            Reservations
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header style={{ paddingRight: "0px", marginRight: "5px" }}>
-          <Menu
-            mode="horizontal"
-            theme={"dark"}
-            style={{ float: "right", margin: "0" }}
-          >
-            <SubMenu key="options" icon={<PlusSquareOutlined />} title="Add">
+          <SubMenu key="options" icon={<ControlOutlined />} title="Options">
+            <Menu.ItemGroup className="siderMenuGroup" title="-- Pages --">
+              <Menu.Item
+                key="clients"
+                icon={<TeamOutlined />}
+                title="Clients"
+                onClick={() => history.push("/clients")}
+              >
+                Clients
+              </Menu.Item>
+              <Menu.Item
+                key="cars"
+                icon={<CarOutlined />}
+                title="Cars"
+                onClick={() => history.push("/cars")}
+              >
+                Cars
+              </Menu.Item>
+              <Menu.Item
+                key="reservations"
+                icon={<SolutionOutlined />}
+                title="Reservations"
+                onClick={() => history.push("/reservations")}
+              >
+                Reservations
+              </Menu.Item>
+            </Menu.ItemGroup>
+            <Menu.ItemGroup title="-- Add --">
               <Menu.Item
                 key="option:1"
                 icon={<TeamOutlined />}
@@ -129,30 +110,66 @@ const Navbar = ({ content }) => {
               <Menu.Item disabled key="option:3" icon={<SolutionOutlined />}>
                 Add new Reservation
               </Menu.Item>
-              <Menu.ItemGroup title="- Choose language -">
-                <Menu.Item disabled key="option:4" icon={<ReadOutlined />}>
-                  MNE
-                </Menu.Item>
-                <Menu.Item disabled key="option:5" icon={<ReadOutlined />}>
-                  ENG
-                </Menu.Item>
-              </Menu.ItemGroup>
-            </SubMenu>
-            <Menu.Item key="user" icon={<UserOutlined />}>
-              User:
+            </Menu.ItemGroup>
+            <Menu.ItemGroup title="-- Choose language --">
+              <Menu.Item disabled key="option:4" icon={<ReadOutlined />}>
+                MNE
+              </Menu.Item>
+              <Menu.Item disabled key="option:5" icon={<ReadOutlined />}>
+                ENG
+              </Menu.Item>
+            </Menu.ItemGroup>
+          </SubMenu>
+          <Menu.Item disabled key="user" icon={<UserOutlined />}>
+            User:
+          </Menu.Item>
+          <Menu.Item
+            key="logout"
+            danger={true}
+            icon={<LogoutOutlined />}
+            onClick={() => {
+              logoutClick();
+            }}
+          >
+            Logout
+          </Menu.Item>
+        </Menu>
+      </Header>
+      <Layout>
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={onCollapse}
+          breakpoint="lg"
+          onBreakpoint={onCollapse}
+        >
+          <Menu theme="dark" mode="inline">
+            <Menu.Item
+              key="2"
+              icon={<TeamOutlined />}
+              title="Clients"
+              onClick={() => history.push("/clients")}
+            >
+              Clients
             </Menu.Item>
             <Menu.Item
-              key="logout"
-              danger={true}
-              icon={<LogoutOutlined />}
-              onClick={() => {
-                logoutClick();
-              }}
+              key="3"
+              icon={<CarOutlined />}
+              title="Cars"
+              onClick={() => history.push("/cars")}
             >
-              Logout
+              Cars
+            </Menu.Item>
+            <Menu.Item
+              key="4"
+              icon={<SolutionOutlined />}
+              title="Reservations"
+              onClick={() => history.push("/reservations")}
+            >
+              Reservations
             </Menu.Item>
           </Menu>
-        </Header>
+        </Sider>
         <Content>{content}</Content>
       </Layout>
     </Layout>

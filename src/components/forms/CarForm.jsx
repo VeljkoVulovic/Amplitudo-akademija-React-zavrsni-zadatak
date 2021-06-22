@@ -188,8 +188,8 @@ const CarForm = ({ id, disabled }) => {
             control={control}
             render={({ field }) => (
               <Select
-                style={{ width: "352px" }}
                 {...field}
+                className="width"
                 disabled={disabled}
                 placeholder="-- Choose type --"
                 options={getCarTypesResponse?.data?.data.map((type) => {
@@ -305,9 +305,8 @@ const CarForm = ({ id, disabled }) => {
               />
             )}
           />
-          <div className="header">
+          <div className="buttons">
             <Button
-              style={{ width: "120px", marginTop: "35px" }}
               icon={<CloudUploadOutlined className="site-form-item-icon" />}
               type="primary"
               onClick={handleSubmit(onSubmit)}

@@ -10,18 +10,7 @@ export const login = (data) => {
   });
 };
 
-export const logout = () => {
-  return axiosInstance.post(`/auth/logout`);
+export const logout = (data) => {
+  return axiosInstance.post(`/auth/logout`,data,{ headers: { Authorization: `Bearer ${localStorage.getItem("jwt-token")}`}})
 };
 
-export const account = () => {
-  return axiosInstance.post(`/auth/me`);
-};
-
-export const refreshToken = () => {
-  return axiosInstance.post(`/auth/refresh`);
-};
-
-export const changePassword = (data) => {
-  return axiosInstance.post(`/auth/change-password`, data);
-};

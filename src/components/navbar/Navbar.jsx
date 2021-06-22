@@ -37,7 +37,7 @@ const Navbar = ({ content }) => {
   });
 
   const logoutClick = () => {
-    logoutMutation.mutate();
+    logoutMutation.mutate("");
   };
 
   const onCollapse = (collapsed) => {
